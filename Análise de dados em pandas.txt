@@ -1,0 +1,57 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Carregar os dados de um arquivo CSV
+def carregar_dados(caminho_arquivo):
+    try:
+        dados = pd.read_csv(caminho_arquivo)
+        print("Dados carregados com sucesso!\n")
+        print(dados.head())
+        return dados
+    except Exception as e:
+        print(f"Erro ao carregar o arquivo: {e}")
+        return None
+
+# Resumo estatístico dos dados
+def resumo_estatistico(dados):
+    if dados is not None:
+        print("Resumo Estatístico:\n")
+        print(dados.describe())
+
+# Visualização de dados
+def plotar_grafico(dados, coluna_x, coluna_y):
+    if dados is not None:
+        try:
+            plt.figure(figsize=(10, 6))
+            plt.scatter(dados[coluna_x], dados[coluna_y], alpha=0.5)
+            plt.title(f"Gráfico de {coluna_x} vs {coluna_y}")
+            plt.xlabel(coluna_x)
+            plt.ylabel(coluna_y)
+            plt.grid()
+            plt.show()
+        except KeyError:
+            print(f"As colunas {coluna_x} ou {coluna_y} não foram encontradas nos dados.")
+
+# Salvar resumo estatístico em um arquivo
+def salvar_resumo(dados, caminho_saida):
+    if dados is not None:
+        try:
+            resumo = dados.describe()
+            resumo.to_csv(caminho_saida)
+            print(f"Resumo estatístico salvo em {caminho_saida}")
+        except Exception as e:
+            print(f"Erro ao salvar o resumo: {e}")
+
+# Exemplo de uso
+if __name__ == "__main__":
+    caminho = "dados.csv"  # Substitua pelo caminho do seu arquivo
+    dados = carregar_dados(caminho)
+
+    if dados is not None:
+        resumo_estatistico(dados)
+        coluna_x = "coluna1"  # Substitua por uma coluna válida do seu dataset
+        coluna_y = "coluna2"  # Substitua por outra coluna válida do seu dataset
+        plotar_grafico(dados, coluna_x, coluna_y)
+        salvar_resumo(dados, "resumo_estatistico.csv")
+
+
